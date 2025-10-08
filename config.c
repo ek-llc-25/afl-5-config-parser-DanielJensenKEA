@@ -78,7 +78,7 @@ struct setting_t *setting_converter(char *line) {
         if (line[i] == '=') {
             line [i] = '\0'; //Erstatter '=' med en null byte, så vi splitter line op i to strings
             setting->name = line;
-            setting->value = line + i + 1; //Vi laver +i+1 for at være på den "anden side" af null byten
+            setting->value = line+ i + 1; //Vi laver +i+1 for at være på den "anden side" af null byten
             break;
         }
     }
