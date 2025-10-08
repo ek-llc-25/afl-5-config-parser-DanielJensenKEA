@@ -52,7 +52,8 @@ struct config_t *read_config(char *filename) {
         // Efter `buf2` er allokeret og config-linjen er kopieret ind, skal
         // pointeren gemmes i vores datastruktur, så den ikke går tabt. Den
         // gemmes på plads `config->count` som er seneste ubrugte plads.
-        config->lines[config->count] = buf2; // brug setting_converter()
+        //config->lines[config->count] = buf2; // brug setting_converter()
+        config->lines[config->count] = setting_converter(buf2);
 
         // `count` forøges så næste config-linjes buffer gemmes på næste plads.
         config->count += 1;
@@ -73,9 +74,14 @@ struct setting_t *setting_converter(char *line) {
 
     // TODO: Find navnet på setting'en i *line
     // TODO: Find værdien på setting'en i *line
-
-    setting->name = NULL; // skal ændres
-    setting->value = NULL; // skal ændres
+    for (int i = 0; i <= strlen(line); i++) {
+        if (line[i] == '=') {
+            line [i] = '\0'; //Erstatter '=' med en null byte, så vi splitter line op i to strings
+            setting->name = line;
+            setting->value = line + i + 1; //Vi laver +i+1 for at være på den "anden side" af null byten
+            break;
+        }
+    }
 
     // TODO: return den setting hvor felterne er sat
     return setting;
@@ -83,12 +89,13 @@ struct setting_t *setting_converter(char *line) {
 
 void print_setting(struct setting_t *setting) {
     // TODO: Print en enkelt setting's name og value
+    printf("%s:%s", setting->name, setting->value);
 }
 
 void print_config(struct config_t *config) {
     for (int i = 0; i < config->count; i++) {
-        printf("Setting: %s", config->lines[i]);
-        // print_setting(config->lines[i]);
+        //printf("Setting: %s", config->lines[i]);
+        print_setting(config->lines[i]);
     }
 }
 
